@@ -9,6 +9,26 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User{
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  email String
+  isVerified Boolean @default(false)
+  password String
+  credits Int
+
+  blogs Blogs[]
+}
+
+model Blogs{
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  blogUrl String
+  blogSummary String
+
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @db.ObjectId
 }
